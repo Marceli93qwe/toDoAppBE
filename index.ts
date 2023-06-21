@@ -7,6 +7,7 @@ import {errorHandler} from "./middlewares/error.middleware";
 
 const app = express();
 
+app.use(express.json())
 app.use("/", homeRouter);
 app.use("/auth", authRouter)
 
