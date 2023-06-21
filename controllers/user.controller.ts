@@ -19,7 +19,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const user = await UserRecord.findByEmail(email);
     if (!user) throw new NotFoundError("couldn't find user with this email");
     if (await compare(password, user.password)) {
-        const token = sign({id: user.id}, process.env.SECRET_KEY);
+        const token = sign({email: user.email}, process.env.SECRET_KEY);
         return res.json({token})
     }
     throw new UnauthorizedError("Wrong password given");
