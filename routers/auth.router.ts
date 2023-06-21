@@ -1,16 +1,10 @@
 import {Router} from "express";
-import {UserRecord} from "../records/user.record";
+import {login, register} from "../controllers/user.controller";
 
 export const authRouter = Router();
 
 
 authRouter
-    .post("/login", async (req, res) => {
-        // @todo login action
-    })
-    .post("/register", async (req, res) => {
-        // @todo register action
-        const user = new UserRecord("123", "Testowy", "testowy@gmail.com", "jajco");
-        // await user.register();
-    })
+    .post("/login", login)
+    .post("/register", register)
 
