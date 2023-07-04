@@ -29,6 +29,17 @@ export class UserRecord {
         }
     }
 
+    static async findById(id: string): Promise<UserRecord | null> {
+        const query = 'SELECT * FROM users WHERE id = ? LIMIT 1';
+        const [rows] = await pool.execute(query, [id]) as RowDataPacket[];
+        if (rows.length > 0) {
+            const {id, email, username, password} = rows[0];
+            return new UserRecord({id, username, password, email});
+        } else {
+            return null;
+        }
+    }
+
     async userExists(): Promise<boolean> {
         const query = 'SELECT COUNT(*) as count FROM users WHERE email = ?';
         const [rows] = await pool.execute(query, [this.email]) as RowDataPacket[];
