@@ -1,33 +1,32 @@
-import {UserRecord} from "./user.record";
+import {v4 as uuidv4} from 'uuid';
 import {pool} from "../config/db.config";
 
-class BookmarkRecord {
-    id: string;
+// Interface to describe the shape of the BookmarkRecord properties
+interface BookmarkProps {
+    id?: string;
+    bookmarkName: string;
+    user_id: string;
+}
+
+export class BookmarkRecord {
+    id?: string;
     bookmarkName: string;
     user_id: string;
 
-    constructor(id: string, bookmarkName: string, user_id: string) {
-        this.id = id;
+    // Constructor that accepts an object with properties matching the BookmarkProps interface
+    constructor({id, bookmarkName, user_id}: BookmarkProps) {
+        // Assigning the provided id or generating a new UUID using uuidv4()
+        this.id = id || uuidv4();
         this.bookmarkName = bookmarkName;
         this.user_id = user_id;
     }
 
-    async addBookmark(userId: string, bookmarkName: string) {
+    // Method to add the bookmark to the database
+    async addBookmark() {
+        const query = 'INSERT INTO bookmarks (id, bookmarkName, user_id) VALUES (?, ?, ?)';
+        const values = [this.id, this.bookmarkName, this.user_id];
 
-        const userExists = await UserRecord.userExists(userId);
-
-        if (userExists) {
-            const query = 'INSERT INTO bookmarks (id, bookmarkName, user_id) VALUES (:id, :bookmarkName, :user_id)';
-            const values = {
-                id: this.id,
-                bookmarkName: bookmarkName,
-                user_id: userId
-            };
-            await pool.execute(query, values);
-        } else {
-            // @todo
-            console.log('Użytkownik o podanym ID nie istnieje.');
-        }
-
+        // Executing the SQL query using the provided pool object
+        await pool.execute(query, values);
     }
 }
