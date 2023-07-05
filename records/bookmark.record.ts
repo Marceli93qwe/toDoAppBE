@@ -1,5 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 import {pool} from "../config/db.config";
+import {RowDataPacket} from "mysql2";
 
 // Interface to describe the shape of the BookmarkRecord properties
 interface BookmarkProps {
@@ -21,6 +22,21 @@ export class BookmarkRecord {
         this.user_id = user_id;
     }
 
+    static async findByUserId(user_id: string): Promise<BookmarkRecord[]> {
+        const query = 'SELECT * FROM bookmarks WHERE user_id = ?';
+        const values = [user_id];
+
+        const [rows] = await pool.execute(query, values) as RowDataPacket[];
+
+        // Mappin result of the query to BookmarkRecords
+        const bookmarks: BookmarkRecord[] = rows.map((row: RowDataPacket) => {
+            const {id, bookmarkName, user_id} = row;
+            return new BookmarkRecord({bookmarkName, user_id, id});
+        });
+
+        return bookmarks;
+    }
+
     // Method to add the bookmark to the database
     async addBookmark() {
         const query = 'INSERT INTO bookmarks (id, bookmarkName, user_id) VALUES (?, ?, ?)';
@@ -30,3 +46,4 @@ export class BookmarkRecord {
         await pool.execute(query, values);
     }
 }
+
