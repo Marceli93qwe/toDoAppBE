@@ -5,7 +5,8 @@ import {NotFoundError} from "../middlewares/error.middleware";
 
 export const addBookmark = async (req: Request, res: Response) => {
     // Retrieve bookmark data from the request body
-    const {id, bookmarkName, user_id} = req.body;
+    const {id, bookmarkName} = req.body;
+    const {user_id} = req.params;
 
 // Check if the user exists
     const user = await UserRecord.findById(user_id);
