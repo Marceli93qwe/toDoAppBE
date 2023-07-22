@@ -2,6 +2,8 @@ import {Request, Response} from "express";
 import {UserRecord} from "../records/user.record";
 import {BookmarkRecord} from "../records/bookmark.record";
 import {NotFoundError} from "../middlewares/error.middleware";
+import {pool} from "../config/db.config";
+import {ResultSetHeader} from "mysql2";
 
 export const addBookmark = async (req: Request, res: Response) => {
     // Retrieve bookmark data from the request body
@@ -40,3 +42,33 @@ export async function getUserBookmarks(
 
     res.json({bookmarks});
 }
+
+export const clearBookmarks = async (req: Request, res: Response) => {
+    const userId = req.params.user_id;
+
+    // Check if the user with the given ID exists
+    const user = await UserRecord.findById(userId);
+
+    if (!user) {
+        throw new NotFoundError(`User with the provided ID does not exist.`);
+    }
+
+    // Execute the query to delete all bookmarks for the user (userId) from the database
+    const query = 'DELETE FROM bookmarks WHERE user_id = ?';
+    await pool.execute(query, [userId]);
+
+    res.status(204).end();
+};
+
+export const deleteBookmark = async (req: Request, res: Response) => {
+    const {user_id, bookmark_id} = req.params;
+
+    // Check if the bookmark belongs to specified user (user_id)
+    const query = 'DELETE FROM bookmarks WHERE id = ? AND user_id = ?';
+    const [result] = await pool.execute<ResultSetHeader>(query, [bookmark_id, user_id]);
+
+    if (result.affectedRows === 0) {
+        throw new NotFoundError("Bookmark not found")
+    }
+    res.status(204).end();
+};

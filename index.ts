@@ -1,5 +1,4 @@
 import express from "express";
-//@TODO check if that works properly
 import "express-async-errors";
 import {homeRouter} from "./routers/home.router";
 import {authRouter} from "./routers/auth.router";
