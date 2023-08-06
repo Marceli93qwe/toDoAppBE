@@ -1,5 +1,5 @@
 import {pool} from "../config/db.config";
-import {ConflictError, ValidationError} from "../middlewares/error.middleware";
+import {ConflictError, NotFoundError, ValidationError} from "../middlewares/error.middleware";
 import {v4 as uuid} from "uuid";
 import {RowDataPacket} from "mysql2";
 import {hash} from "bcrypt";
@@ -24,9 +24,8 @@ export class UserRecord {
         if (rows.length > 0) {
             const {id, email, username, password} = rows[0];
             return new UserRecord({id, username, password, email});
-        } else {
-            return null;
         }
+        throw new NotFoundError("Couldn't find the user with this id")
     }
 
     static async findById(id: string): Promise<UserRecord | null> {
@@ -35,9 +34,8 @@ export class UserRecord {
         if (rows.length > 0) {
             const {id, email, username, password} = rows[0];
             return new UserRecord({id, username, password, email});
-        } else {
-            return null;
         }
+        throw new NotFoundError("Couldn't find the user with this id");
     }
 
     async userExists(): Promise<boolean> {

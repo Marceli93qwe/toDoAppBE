@@ -26,6 +26,11 @@ export class TaskRecord {
         return rows;
     }
 
+    static async clearBookmarkTasks(bookmark_id: string) {
+        const [rows] = await pool.execute('DELETE FROM `tasks` WHERE `bookmark_id` =:bookmark_id', {bookmark_id});
+        return rows;
+    }
+
     validate(): void {
         if (!this.id) {
             this.id = uuid();
