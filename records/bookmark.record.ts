@@ -24,6 +24,15 @@ export class BookmarkRecord {
         this.user_id = user_id;
     }
 
+    static async findById(bookmark_id: string) {
+        const query = 'SELCET * FROM bookmarks WHERE id = :id';
+        const data = {id: bookmark_id}
+        const [rows] = await pool.execute(query, data) as RowDataPacket[];
+
+        const {id, bookmarkName, user_id} = rows[0];
+        return new BookmarkRecord({id, bookmarkName, user_id})
+    }
+
     static async findByUserId(user_id: string): Promise<BookmarkRecord[]> {
         const query = 'SELECT * FROM bookmarks WHERE user_id = ?';
         const values = [user_id];
@@ -51,6 +60,15 @@ export class BookmarkRecord {
     static async removeBookmark(bookmark_id: string, user_id: string) {
         const query = 'DELETE FROM bookmarks WHERE id = :bookmark_id AND user_id = :user_id';
         const [result] = await pool.execute<ResultSetHeader>(query, {bookmark_id, user_id});
+        if (result.affectedRows === 0) {
+            throw new NotFoundError("Bookmark not found");
+        }
+    }
+
+    static async modifyBookmark(bookmark_id: string, newName: string) {
+        const query = 'UPDATE bookmarks SET bookmarkName = :newName WHERE id = :bookmark_id'
+        const data = {bookmark_id, newName}
+        const [result] = await pool.execute<ResultSetHeader>(query, data);
         if (result.affectedRows === 0) {
             throw new NotFoundError("Bookmark not found");
         }

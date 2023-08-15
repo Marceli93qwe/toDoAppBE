@@ -1,4 +1,10 @@
-import {addBookmark, clearBookmarks, deleteBookmark, getUserBookmarks} from "../controllers/bookmark.controller";
+import {
+    addBookmark,
+    clearBookmarks,
+    deleteBookmark,
+    getUserBookmarks,
+    modifyBookmark
+} from "../controllers/bookmark.controller";
 import express from "express";
 import {addTask, getAllTasksFromBookmark} from "../controllers/task.controller";
 
@@ -14,4 +20,6 @@ userRouter.post("/:user_id/bookmarks/:bookmark_id", addTask);
 // DELETE
 userRouter.delete("/:user_id/bookmarks", clearBookmarks);
 userRouter.delete("/:user_id/bookmarks/:bookmark_id", deleteBookmark);
+// PUT
+userRouter.put("/:user_id/bookmarks/:bookmark_id", modifyBookmark);
 

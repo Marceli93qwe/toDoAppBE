@@ -41,3 +41,12 @@ export const deleteBookmark = async (req: Request, res: Response) => {
     await BookmarkRecord.removeBookmark(bookmark_id, user_id)
     res.status(204).end();
 };
+
+export const modifyBookmark = async (req: Request, res: Response) => {
+    const {bookmark_id} = req.params;
+    //get the new bookmarkName from request body
+    const {bookmarkName} = req.body;
+    //modify the specified data
+    await BookmarkRecord.modifyBookmark(bookmark_id, bookmarkName);
+    res.status(204).end();
+}
