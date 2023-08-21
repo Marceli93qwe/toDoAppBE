@@ -1,6 +1,7 @@
 import {v4 as uuid} from 'uuid';
-import {ValidationError} from "../middlewares/error.middleware";
-import {pool} from "../config/db.config"; // Assuming you have this class defined in another module
+import {NotFoundError, ValidationError} from "../middlewares/error.middleware";
+import {pool} from "../config/db.config";
+import {ResultSetHeader, RowDataPacket} from "mysql2";
 
 export class TaskRecord {
     id?: string;
@@ -16,19 +17,41 @@ export class TaskRecord {
     // Method to get all tasks from the database
     static async getAllTasks(bookmark_id: string) {
         console.log(bookmark_id)
-        const [rows] = await pool.execute('SELECT * FROM `tasks` WHERE bookmark_id = :bookmark_id', {bookmark_id});
+        const [rows] = (await pool.execute('SELECT * FROM `tasks` WHERE bookmark_id = :bookmark_id', {bookmark_id})) as RowDataPacket[][];
         return rows;
     }
 
     // Method to get a specific task from the database
     static async getTask(id: string) {
-        const [rows] = await pool.execute('SELECT * FROM tasks WHERE id = :id', {id});
+        const [rows] = await pool.execute('SELECT * FROM tasks WHERE id = :id', {id}) as RowDataPacket[][];
+        if (rows.length === 0) throw new NotFoundError("Could't find taskd with this id");
         return rows;
     }
 
-    static async clearBookmarkTasks(bookmark_id: string) {
-        const [rows] = await pool.execute('DELETE FROM `tasks` WHERE `bookmark_id` =:bookmark_id', {bookmark_id});
-        return rows;
+    static async deleteTask(taskId: string) {
+        const query = 'DELETE FROM tasks WHERE id = :id'
+        const [result] = await pool.execute<ResultSetHeader>(query, {id: taskId});
+        if (result.affectedRows === 0) {
+            throw new NotFoundError("Task not found");
+        }
+    }
+
+    static async clearAllTasks(bookmarkId: string) {
+        // Execute the query to delete all bookmarks for the user (userId) from the database
+        const query = 'DELETE FROM tasks WHERE bookmark_id = ?';
+        const [result] = await pool.execute<ResultSetHeader>(query, [bookmarkId]);
+        if (result.affectedRows === 0) {
+            throw new NotFoundError("Bookmark not found");
+        }
+    }
+
+    static async updateName(taskId: string, newName: string) {
+        const query = "UPDATE `tasks` SET `taskName` = :newName WHERE id = :id";
+        const values = {id: taskId, newName};
+        const [result] = await pool.execute<ResultSetHeader>(query, values);
+        if (result.affectedRows === 0) {
+            throw new NotFoundError("Task not found");
+        }
     }
 
     validate(): void {

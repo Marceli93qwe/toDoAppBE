@@ -30,3 +30,28 @@ export async function addTask(req: Request, res: Response,) {
     // Send a 201 Created status code along with the task data
     res.status(201).json(task);
 }
+
+export const clearTasks = async (req: Request, res: Response) => {
+    const {bookmark_id} = req.params;
+    await TaskRecord.clearAllTasks(bookmark_id)
+    res.status(204).end();
+}
+
+export const getSingleTask = async (req: Request, res: Response) => {
+    const {task_id} = req.params;
+    const task = await TaskRecord.getTask(task_id);
+    res.json({task,});
+}
+
+export const deleteTask = async (req: Request, res: Response) => {
+    const {task_id} = req.params;
+    await TaskRecord.deleteTask(task_id);
+    res.status(204).end();
+}
+
+export const updateTaskName = async (req: Request, res: Response) => {
+    const {task_id} = req.params;
+    const {newName} = req.body;
+    await TaskRecord.updateName(task_id, newName);
+    res.status(204).end();
+}
