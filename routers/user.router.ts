@@ -14,6 +14,13 @@ import {
     getSingleTask,
     updateTaskName
 } from "../controllers/task.controller";
+import {
+    addSubtask,
+    clearSubtasks,
+    getAllSubtasksFromTask,
+    getSingleSubtask,
+    updateSubtaskName
+} from "../controllers/subtask.controller";
 
 export const userRouter = express.Router();
 
@@ -36,3 +43,9 @@ userRouter.put("/:user_id/bookmarks/:bookmark_id", modifyBookmark);
 userRouter.put("/:user_id/bookmarks/:bookmark_id/tasks/:task_id", updateTaskName);
 
 
+//SUBTASKS
+userRouter.post("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks", addSubtask);
+userRouter.put("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks/:subtask_id", updateSubtaskName);
+userRouter.get("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks", getAllSubtasksFromTask);
+userRouter.get("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks/:subtask_id", getSingleSubtask);
+userRouter.delete("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks", clearSubtasks);
