@@ -5,14 +5,16 @@ import {
     getSingleSubtask,
     updateSubtaskName
 } from "../../controllers/subtask.controller";
-import {userRouter} from "./user.router";
+import {Router} from "express";
+
+export const subtaskRouter = Router({mergeParams: true})
 
 // GET
-userRouter.get("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks", getAllSubtasksFromTask);
-userRouter.get("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks/:subtask_id", getSingleSubtask);
+subtaskRouter.get("/", getAllSubtasksFromTask);
+subtaskRouter.get("/:subtask_id", getSingleSubtask);
 // POST
-userRouter.post("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks", addSubtask);
+subtaskRouter.post("/", addSubtask);
 // PUT
-userRouter.put("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks/:subtask_id", updateSubtaskName);
+subtaskRouter.put("/:subtask_id", updateSubtaskName);
 // DELETE
-userRouter.delete("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks", clearSubtasks);
+subtaskRouter.delete("/", clearSubtasks);

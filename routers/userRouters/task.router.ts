@@ -6,14 +6,17 @@ import {
     getSingleTask,
     updateTaskName
 } from "../../controllers/task.controller";
-import {userRouter} from "./user.router";
+import {Router} from "express";
+
+export const taskRouter = Router({mergeParams: true})
+
 // GET
-userRouter.get("/:user_id/bookmarks/:bookmark_id/tasks", getAllTasksFromBookmark);
-userRouter.get("/:user_id/bookmarks/:bookmark_id/tasks/:task_id", getSingleTask);
+taskRouter.get("/", getAllTasksFromBookmark);
+taskRouter.get("/:task_id", getSingleTask);
 // POST
-userRouter.post("/:user_id/bookmarks/bookmark_id/tasks", addTask);
+taskRouter.post("/", addTask);
 // DELETE
-userRouter.delete("/:user_id/bookmarks/:bookmark_id/tasks", clearTasks);
-userRouter.delete("/:user_id/bookmarks/:bookmark_id/tasks/:task_id", deleteTask);
+taskRouter.delete("/", clearTasks);
+taskRouter.delete("/:task_id", deleteTask);
 // PUT
-userRouter.put("/:user_id/bookmarks/:bookmark_id/tasks/:task_id", updateTaskName);
+taskRouter.put("/:task_id", updateTaskName);
