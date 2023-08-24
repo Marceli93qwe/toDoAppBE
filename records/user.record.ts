@@ -25,7 +25,7 @@ export class UserRecord {
             const {id, email, username, password} = rows[0];
             return new UserRecord({id, username, password, email});
         }
-        throw new NotFoundError("Couldn't find the user with this id")
+        throw new NotFoundError("Couldn't find the user with this email")
     }
 
     static async findById(id: string): Promise<UserRecord | null> {
@@ -70,7 +70,7 @@ export class UserRecord {
             !/[a-z]/.test(this.password) ||
             !/[A-Z]/.test(this.password) ||
             !/\d/.test(this.password) ||
-            !/[!@#$%^&*]/.test(this.password)
+            !/[!@#$%^&.,()_+=*'";:`|-]/.test(this.password)
         ) {
             throw new ValidationError("Given invalid register data");
         }
