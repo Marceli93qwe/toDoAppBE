@@ -28,7 +28,7 @@ export class BookmarkRecord {
         const query = 'SELCET * FROM bookmarks WHERE id = :id';
         const data = {id: bookmark_id}
         const [rows] = await pool.execute(query, data) as RowDataPacket[];
-
+        if (!rows[0]) throw new NotFoundError("We couldn't find bookmark with specified id");
         const {id, bookmarkName, user_id} = rows[0];
         return new BookmarkRecord({id, bookmarkName, user_id})
     }

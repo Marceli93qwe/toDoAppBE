@@ -2,19 +2,21 @@ import {
     addBookmark,
     clearBookmarks,
     deleteBookmark,
+    getSingleBookmark,
     getUserBookmarks,
     modifyBookmark
 } from "../../controllers/bookmark.controller";
-import {userRouter} from "./user.router";
+import {Router} from "express";
 
+export const bookmarkRouter = Router({mergeParams: true})
 
 // GET
-userRouter.get('/:user_id/bookmarks', getUserBookmarks);
-// userRouter.get("/:user_id/bookmarks/:bookmark_id", ); //@todo
+bookmarkRouter.get('/', getUserBookmarks);
+bookmarkRouter.get("/:bookmark_id", getSingleBookmark);
 // POST
-userRouter.post("/:user_id/bookmarks", addBookmark);
+bookmarkRouter.post("/", addBookmark);
 // DELETE
-userRouter.delete("/:user_id/bookmarks", clearBookmarks);
-userRouter.delete("/:user_id/bookmarks/:bookmark_id", deleteBookmark);
+bookmarkRouter.delete("/", clearBookmarks);
+bookmarkRouter.delete("/:bookmark_id", deleteBookmark);
 // PUT
-userRouter.put("/:user_id/bookmarks/:bookmark_id", modifyBookmark);
+bookmarkRouter.put("/:bookmark_id", modifyBookmark);
