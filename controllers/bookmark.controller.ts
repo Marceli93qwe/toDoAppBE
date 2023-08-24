@@ -6,14 +6,13 @@ export const addBookmark = async (req: Request, res: Response) => {
     // Retrieve bookmark data from the request body
     const {id, bookmarkName} = req.body;
     const {user_id} = req.params;
-// Check if the user exists
+// Checks if the user exists
     await UserRecord.findById(user_id);
 // Create a new instance of BookmarkRecord
     const bookmark = new BookmarkRecord({id, bookmarkName, user_id});
 // Add the bookmark to the database
     await bookmark.addBookmark();
     return res.status(201).json({message: 'Bookmark successfully added.'});
-
 }
 
 export const getSingleBookmark = async (req: Request, res: Response) => {
@@ -47,8 +46,8 @@ export const deleteBookmark = async (req: Request, res: Response) => {
 export const modifyBookmark = async (req: Request, res: Response) => {
     const {bookmark_id} = req.params;
     //get the new bookmarkName from request body
-    const {bookmarkName} = req.body;
+    const {updatedName} = req.body;
     //modify the specified data
-    await BookmarkRecord.modifyBookmark(bookmark_id, bookmarkName);
+    await BookmarkRecord.modifyBookmark(bookmark_id, updatedName);
     res.status(204).end();
 }

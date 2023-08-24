@@ -25,7 +25,7 @@ export class BookmarkRecord {
     }
 
     static async findById(bookmark_id: string) {
-        const query = 'SELCET * FROM bookmarks WHERE id = :id';
+        const query = 'SELECT * FROM bookmarks WHERE id = :id';
         const data = {id: bookmark_id}
         const [rows] = await pool.execute(query, data) as RowDataPacket[];
         if (!rows[0]) throw new NotFoundError("We couldn't find bookmark with specified id");
