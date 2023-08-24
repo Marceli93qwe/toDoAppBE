@@ -1,14 +1,12 @@
 import express from "express";
 import "express-async-errors";
-import {homeRouter} from "./routers/home.router";
 import {authRouter} from "./routers/auth.router";
 import {errorHandler} from "./middlewares/error.middleware";
-import {userRouter} from "./routers/user.router";
+import {userRouter} from "./routers/userRouters/user.router";
 
 const app = express();
 
 app.use(express.json())
-app.use("/", homeRouter);
 app.use("/auth", authRouter)
 app.use("/users", userRouter)
 app.use(errorHandler);
