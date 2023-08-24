@@ -2,19 +2,19 @@ import {Request, Response} from "express";
 import {SubtaskRecord} from "../records/subtask.record";
 
 export const getAllSubtasksFromTask = async (req: Request, res: Response): Promise<void> => {
-    // Here we retrieve the taskId from the route parameters
-    const taskId: string = req.params.task_id;
+    // Here we retrieve the task_id from the route parameters
+    const {task_id} = req.params;
 
-    const subtasks = await SubtaskRecord.getAllSubtasks(taskId);
+    const subtasks = await SubtaskRecord.getAllSubtasks(task_id);
 
     // Send the response back to the client
     res.status(200).json({
-        taskId,
+        task_id,
         subtasks
     });
 };
 
-export async function addSubtask(req: Request, res: Response,) {
+export const addSubtask = async (req: Request, res: Response) => {
     // Get the task ID from the request path
     const {task_id} = req.params;
 

@@ -2,19 +2,19 @@ import {Request, Response} from "express";
 import {TaskRecord} from "../records/task.record";
 
 export const getAllTasksFromBookmark = async (req: Request, res: Response): Promise<void> => {
-    // Here we retrieve the bookmarkId from the route parameters
-    const bookmarkId: string = req.params.bookmark_id;
+    // Here we retrieve the bookmark_i d from the route parameters
+    const {bookmark_id} = req.params;
 
-    const tasks = await TaskRecord.getAllTasks(bookmarkId);
+    const tasks = await TaskRecord.getAllTasks(bookmark_id);
 
     // Send the response back to the client
     res.status(200).json({
-        bookmarkId,
+        bookmark_id,
         tasks
     });
 };
 
-export async function addTask(req: Request, res: Response,) {
+export const addTask = async (req: Request, res: Response) => {
     // Get the bookmark ID from the request path
     const {bookmark_id} = req.params;
 
@@ -51,7 +51,7 @@ export const deleteTask = async (req: Request, res: Response) => {
 
 export const updateTaskName = async (req: Request, res: Response) => {
     const {task_id} = req.params;
-    const {newName} = req.body;
-    await TaskRecord.updateName(task_id, newName);
+    const {updatedName} = req.body;
+    await TaskRecord.updateName(task_id, updatedName);
     res.status(204).end();
 }

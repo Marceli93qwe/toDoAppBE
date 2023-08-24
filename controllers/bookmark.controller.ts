@@ -21,7 +21,7 @@ export const getSingleBookmark = async (req: Request, res: Response) => {
     res.json({bookmark});
 }
 
-export async function getUserBookmarks(req: Request, res: Response) {
+export const getUserBookmarks = async (req: Request, res: Response) => {
     const {user_id} = req.params;
     // Check if the user exists before retrieving the bookmarks
     await UserRecord.findById(user_id);
