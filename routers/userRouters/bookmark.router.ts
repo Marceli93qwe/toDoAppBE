@@ -12,11 +12,11 @@ export const bookmarkRouter = Router({mergeParams: true})
 
 // GET
 bookmarkRouter.get('/', getUserBookmarks);
-bookmarkRouter.get("/:bookmark_id", getSingleBookmark);
+bookmarkRouter.get("/:bookmarkId", getSingleBookmark);
 // POST
 bookmarkRouter.post("/", addBookmark);
 // DELETE
 bookmarkRouter.delete("/", clearBookmarks);
-bookmarkRouter.delete("/:bookmark_id", deleteBookmark);
+bookmarkRouter.delete("/:bookmarkId", deleteBookmark);
 // PUT
-bookmarkRouter.put("/:bookmark_id", modifyBookmark);
+bookmarkRouter.put("/:bookmarkId", modifyBookmark);

@@ -12,11 +12,11 @@ export const taskRouter = Router({mergeParams: true})
 
 // GET
 taskRouter.get("/", getAllTasksFromBookmark);
-taskRouter.get("/:task_id", getSingleTask);
+taskRouter.get("/:taskId", getSingleTask);
 // POST
 taskRouter.post("/", addTask);
 // DELETE
 taskRouter.delete("/", clearTasks);
-taskRouter.delete("/:task_id", deleteTask);
+taskRouter.delete("/:taskId", deleteTask);
 // PUT
-taskRouter.put("/:task_id", updateTaskName);
+taskRouter.put("/:taskId", updateTaskName);

@@ -11,10 +11,10 @@ export const subtaskRouter = Router({mergeParams: true})
 
 // GET
 subtaskRouter.get("/", getAllSubtasksFromTask);
-subtaskRouter.get("/:subtask_id", getSingleSubtask);
+subtaskRouter.get("/:subtaskId", getSingleSubtask);
 // POST
 subtaskRouter.post("/", addSubtask);
 // PUT
-subtaskRouter.put("/:subtask_id", updateSubtaskName);
+subtaskRouter.put("/:subtaskId", updateSubtaskName);
 // DELETE
 subtaskRouter.delete("/", clearSubtasks);

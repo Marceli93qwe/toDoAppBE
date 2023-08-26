@@ -6,30 +6,30 @@ import {ResultSetHeader, RowDataPacket} from "mysql2";
 export class TaskRecord {
     id?: string;
     taskName: string;
-    bookmark_id: string;
+    bookmarkId: string;
 
-    constructor(taskName: string, bookmark_id: string, description?: string, id?: string) {
+    constructor(taskName: string, bookmarkId: string, description?: string, id?: string) {
         this.id = id;
         this.taskName = taskName;
-        this.bookmark_id = bookmark_id;
+        this.bookmarkId = bookmarkId;
     }
 
     // Method to get all tasks from the database
-    static async getAllTasks(bookmark_id: string) {
-        console.log(bookmark_id)
-        const [rows] = (await pool.execute('SELECT * FROM `tasks` WHERE bookmark_id = :bookmark_id', {bookmark_id})) as RowDataPacket[][];
+    static async getAllTasks(bookmarkId: string) {
+        console.log(bookmarkId);
+        const [rows] = (await pool.execute('SELECT * FROM `tasks` WHERE bookmarkId = :bookmarkId', {bookmarkId})) as RowDataPacket[][];
         return rows;
     }
 
     // Method to get a specific task from the database
     static async getTask(id: string) {
         const [rows] = await pool.execute('SELECT * FROM tasks WHERE id = :id', {id}) as RowDataPacket[][];
-        if (rows.length === 0) throw new NotFoundError("Could't find taskd with this id");
+        if (rows.length === 0) throw new NotFoundError("Couldn't find task with this id");
         return rows;
     }
 
     static async deleteTask(taskId: string) {
-        const query = 'DELETE FROM tasks WHERE id = :id'
+        const query = 'DELETE FROM tasks WHERE id = :id';
         const [result] = await pool.execute<ResultSetHeader>(query, {id: taskId});
         if (result.affectedRows === 0) {
             throw new NotFoundError("Task not found");
@@ -37,8 +37,7 @@ export class TaskRecord {
     }
 
     static async clearAllTasks(bookmarkId: string) {
-        // Execute the query to delete all bookmarks for the user (userId) from the database
-        const query = 'DELETE FROM tasks WHERE bookmark_id = ?';
+        const query = 'DELETE FROM tasks WHERE bookmarkId = ?';
         const [result] = await pool.execute<ResultSetHeader>(query, [bookmarkId]);
         if (result.affectedRows === 0) {
             throw new NotFoundError("Bookmark not found");
@@ -63,7 +62,7 @@ export class TaskRecord {
             throw new ValidationError('Task name must be a string');
         }
 
-        if (this.bookmark_id.length !== 36) {
+        if (this.bookmarkId.length !== 36) {
             throw new ValidationError('Bookmark ID must be 36 characters long');
         }
     }
@@ -71,10 +70,10 @@ export class TaskRecord {
     // Method to add task to database
     async addToDatabase() {
         this.validate();
-        const [rows] = await pool.execute('INSERT INTO `tasks` (id, taskName, bookmark_id) VALUES (:id, :taskName, :bookmark_id)', {
+        const [rows] = await pool.execute('INSERT INTO `tasks` (id, taskName, bookmarkId) VALUES (:id, :taskName, :bookmarkId)', {
             id: this.id,
             taskName: this.taskName,
-            bookmark_id: this.bookmark_id,
+            bookmarkId: this.bookmarkId,
         });
         return rows;
     }

@@ -5,7 +5,7 @@ import {subtaskRouter} from "./subtask.router";
 
 export const userRouter = express.Router();
 
-userRouter.use("/:user_id/bookmarks", bookmarkRouter);
-userRouter.use("/:user_id/bookmarks/:bookmark_id/tasks", taskRouter);
-userRouter.use("/:user_id/bookmarks/:bookmark_id/tasks/:task_id/subtasks", subtaskRouter);
+userRouter.use("/:userId/bookmarks", bookmarkRouter);
+userRouter.use("/:userId/bookmarks/:bookmarkId/tasks", taskRouter);
+userRouter.use("/:userId/bookmarks/:bookmarkId/tasks/:taskId/subtasks", subtaskRouter);
 

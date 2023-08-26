@@ -1,21 +1,21 @@
 import {ResultSetHeader, RowDataPacket} from "mysql2";
 import {pool} from "../config/db.config";
-import {v4 as uuid} from "uuid"
+import {v4 as uuid} from "uuid";
 import {NotFoundError, ValidationError} from "../middlewares/error.middleware";
 
 export class SubtaskRecord {
     id?: string;
     subtaskName: string;
-    task_id: string;
+    taskId: string;
 
-    constructor(subtaskName: string, task_id: string, description?: string, id?: string) {
+    constructor(subtaskName: string, taskId: string, description?: string, id?: string) {
         this.id = id;
         this.subtaskName = subtaskName;
-        this.task_id = task_id;
+        this.taskId = taskId;
     }
 
-    static async getAllSubtasks(task_id: string) {
-        const [rows] = (await pool.execute('SELECT * FROM `subtasks` WHERE task_id = :task_id', {task_id})) as RowDataPacket[][];
+    static async getAllSubtasks(taskId: string) {
+        const [rows] = (await pool.execute('SELECT * FROM `subtasks` WHERE taskId = :taskId', {taskId})) as RowDataPacket[][];
         return rows;
     }
 
@@ -34,7 +34,7 @@ export class SubtaskRecord {
     }
 
     static async clearAllSubtasks(taskId: string) {
-        const query = 'DELETE FROM subtasks WHERE task_id = ?';
+        const query = 'DELETE FROM subtasks WHERE taskId = ?';
         const [result] = await pool.execute<ResultSetHeader>(query, [taskId]);
         if (result.affectedRows === 0) {
             throw new NotFoundError("Task not found");
@@ -59,17 +59,17 @@ export class SubtaskRecord {
             throw new ValidationError('Subtask name must be a string');
         }
 
-        if (this.task_id.length !== 36) {
+        if (this.taskId.length !== 36) {
             throw new ValidationError('Task ID must be 36 characters long');
         }
     }
 
     async addToDatabase() {
         this.validate();
-        const [rows] = await pool.execute('INSERT INTO `subtasks` (id, subtaskName, task_id) VALUES (:id, :subtaskName, :task_id)', {
+        const [rows] = await pool.execute('INSERT INTO `subtasks` (id, subtaskName, taskId) VALUES (:id, :subtaskName, :taskId)', {
             id: this.id,
             subtaskName: this.subtaskName,
-            task_id: this.task_id,
+            taskId: this.taskId,
         });
         return rows;
     }
