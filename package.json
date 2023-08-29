@@ -1,7 +1,7 @@
 {
   "name": "to_do_app_be",
-  "version": "0.4.0",
-  "description": "api for register/login, and adding/removing user bookmarks and adding tasks for bookmarks",
+  "version": "0.6.6",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "jest",

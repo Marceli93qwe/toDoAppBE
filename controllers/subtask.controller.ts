@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import {SubtaskRecord} from "../records/subtask.record";
 
+
 export const getAllSubtasksFromTask = async (req: Request, res: Response): Promise<void> => {
     // Here we retrieve the taskId from the route parameters
     const {taskId} = req.params;

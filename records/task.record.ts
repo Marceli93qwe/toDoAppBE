@@ -3,7 +3,13 @@ import {NotFoundError, ValidationError} from "../middlewares/error.middleware";
 import {pool} from "../config/db.config";
 import {ResultSetHeader, RowDataPacket} from "mysql2";
 
-export class TaskRecord {
+interface ITaskRecord {
+    id?: string;
+    taskName: string;
+    bookmarkId: string;
+}
+
+export class TaskRecord implements ITaskRecord {
     id?: string;
     taskName: string;
     bookmarkId: string;
@@ -15,36 +21,52 @@ export class TaskRecord {
     }
 
     // Method to get all tasks from the database
-    static async getAllTasks(bookmarkId: string) {
-        console.log(bookmarkId);
-        const [rows] = (await pool.execute('SELECT * FROM `tasks` WHERE bookmarkId = :bookmarkId', {bookmarkId})) as RowDataPacket[][];
-        return rows;
+    static async getAllTasks(bookmarkId: string): Promise<ITaskRecord[]> {
+        const query = 'SELECT * FROM `tasks` WHERE bookmarkId = :bookmarkId';
+        const values = {bookmarkId};
+        const [rows] = (await pool.execute(query, values)) as RowDataPacket[][];
+        return rows.map(row => ({
+            id: row.id,
+            taskName: row.taskName,
+            bookmarkId: row.bookmarkId
+        })) as ITaskRecord[];
     }
 
     // Method to get a specific task from the database
-    static async getTask(id: string) {
-        const [rows] = await pool.execute('SELECT * FROM tasks WHERE id = :id', {id}) as RowDataPacket[][];
-        if (rows.length === 0) throw new NotFoundError("Couldn't find task with this id");
-        return rows;
+    static async getTask(id: string): Promise<ITaskRecord> {
+        const query = 'SELECT * FROM tasks WHERE id = :id';
+        const values = {id}
+        const [[row]] = await pool.execute(query, values) as RowDataPacket[][];
+
+        if (!row) throw new NotFoundError("Couldn't find the task with this id");
+
+        return {
+            id: row.id,
+            taskName: row.taskName,
+            bookmarkId: row.bookmarkId
+        };
     }
 
-    static async deleteTask(taskId: string) {
+
+    static async deleteTask(taskId: string): Promise<void> {
         const query = 'DELETE FROM tasks WHERE id = :id';
-        const [result] = await pool.execute<ResultSetHeader>(query, {id: taskId});
+        const values = {id: taskId}
+        const [result] = await pool.execute<ResultSetHeader>(query, values);
         if (result.affectedRows === 0) {
-            throw new NotFoundError("Task not found");
+            throw new NotFoundError("Couldn't find the task with this id");
         }
     }
 
-    static async clearAllTasks(bookmarkId: string) {
-        const query = 'DELETE FROM tasks WHERE bookmarkId = ?';
-        const [result] = await pool.execute<ResultSetHeader>(query, [bookmarkId]);
+    static async clearAllTasks(bookmarkId: string): Promise<void> {
+        const query = 'DELETE FROM tasks WHERE bookmarkId = :bookmarkId';
+        const values = {bookmarkId};
+        const [result] = await pool.execute<ResultSetHeader>(query, values);
         if (result.affectedRows === 0) {
             throw new NotFoundError("Bookmark not found");
         }
     }
 
-    static async updateName(taskId: string, newName: string) {
+    static async updateName(taskId: string, newName: string): Promise<void> {
         const query = "UPDATE `tasks` SET `taskName` = :newName WHERE id = :id";
         const values = {id: taskId, newName};
         const [result] = await pool.execute<ResultSetHeader>(query, values);
@@ -57,24 +79,17 @@ export class TaskRecord {
         if (!this.id) {
             this.id = uuid();
         }
-
         if (typeof this.taskName !== 'string') {
             throw new ValidationError('Task name must be a string');
-        }
-
-        if (this.bookmarkId.length !== 36) {
-            throw new ValidationError('Bookmark ID must be 36 characters long');
         }
     }
 
     // Method to add task to database
-    async addToDatabase() {
+    async addToDatabase(): Promise<void> {
+        const {id, taskName, bookmarkId} = this;
         this.validate();
-        const [rows] = await pool.execute('INSERT INTO `tasks` (id, taskName, bookmarkId) VALUES (:id, :taskName, :bookmarkId)', {
-            id: this.id,
-            taskName: this.taskName,
-            bookmarkId: this.bookmarkId,
-        });
-        return rows;
+        const query = 'INSERT INTO `tasks` (id, taskName, bookmarkId) VALUES (:id, :taskName, :bookmarkId)';
+        const values = {id, taskName, bookmarkId};
+        await pool.execute(query, values);
     }
 }

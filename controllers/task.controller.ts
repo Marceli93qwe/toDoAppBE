@@ -6,7 +6,6 @@ export const getAllTasksFromBookmark = async (req: Request, res: Response): Prom
     const {bookmarkId} = req.params;
 
     const tasks = await TaskRecord.getAllTasks(bookmarkId);
-
     // Send the response back to the client
     res.status(200).json({
         bookmarkId,
@@ -40,7 +39,8 @@ export const clearTasks = async (req: Request, res: Response) => {
 export const getSingleTask = async (req: Request, res: Response) => {
     const {taskId} = req.params;
     const task = await TaskRecord.getTask(taskId);
-    res.json({task,});
+    const {id, taskName} = task
+    res.json({id, taskName});
 }
 
 export const deleteTask = async (req: Request, res: Response) => {
