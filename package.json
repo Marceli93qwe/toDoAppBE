@@ -1,6 +1,6 @@
 {
   "name": "to_do_app_be",
-  "version": "0.6.6",
+  "version": "0.6.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -13,12 +13,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node-fetch": "^2.6.4",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.3.0",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.3.2",
+    "node-fetch": "^2.7.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
