@@ -1,6 +1,6 @@
 import {
     addSubtask,
-    clearSubtasks,
+    clearSubtasks, deleteSubtask,
     getAllSubtasksFromTask,
     getSingleSubtask,
     updateSubtaskName
@@ -18,3 +18,4 @@ subtaskRouter.post("/", addSubtask);
 subtaskRouter.put("/:subtaskId", updateSubtaskName);
 // DELETE
 subtaskRouter.delete("/", clearSubtasks);
+subtaskRouter.delete("/", deleteSubtask);

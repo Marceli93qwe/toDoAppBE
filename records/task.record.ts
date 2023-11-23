@@ -86,8 +86,9 @@ export class TaskRecord implements ITaskRecord {
 
     // Method to add task to database
     async addToDatabase(): Promise<void> {
-        const {id, taskName, bookmarkId} = this;
+
         this.validate();
+        const {id, taskName, bookmarkId} = this;
         const query = 'INSERT INTO `tasks` (id, taskName, bookmarkId) VALUES (:id, :taskName, :bookmarkId)';
         const values = {id, taskName, bookmarkId};
         await pool.execute(query, values);
