@@ -1,5 +1,5 @@
 import {pool} from "../config/db.config";
-import {ConflictError, ValidationError} from "../middlewares/error.middleware";
+import {ConflictError, NotFoundError, ValidationError} from "../middlewares/error.middleware";
 import {v4 as uuid} from "uuid";
 import {RowDataPacket} from "mysql2";
 import {hash} from "bcrypt";
@@ -24,9 +24,18 @@ export class UserRecord {
         if (rows.length > 0) {
             const {id, email, username, password} = rows[0];
             return new UserRecord({id, username, password, email});
-        } else {
-            return null;
         }
+        throw new NotFoundError("Couldn't find the user with this email")
+    }
+
+    static async findById(id: string): Promise<UserRecord | null> {
+        const query = 'SELECT * FROM users WHERE id = ? LIMIT 1';
+        const [rows] = await pool.execute(query, [id]) as RowDataPacket[];
+        if (rows.length > 0) {
+            const {id, email, username, password} = rows[0];
+            return new UserRecord({id, username, password, email});
+        }
+        throw new NotFoundError("Couldn't find the user with this id");
     }
 
     async userExists(): Promise<boolean> {
@@ -61,7 +70,7 @@ export class UserRecord {
             !/[a-z]/.test(this.password) ||
             !/[A-Z]/.test(this.password) ||
             !/\d/.test(this.password) ||
-            !/[!@#$%^&*]/.test(this.password)
+            !/[!@#$%^&.,()_+=*'";:`|-]/.test(this.password)
         ) {
             throw new ValidationError("Given invalid register data");
         }

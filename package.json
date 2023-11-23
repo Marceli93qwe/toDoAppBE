@@ -1,7 +1,7 @@
 {
   "name": "to_do_app_be",
-  "version": "0.1.0",
-  "description": "basic starting structure of the project",
+  "version": "0.6.6",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "jest",
