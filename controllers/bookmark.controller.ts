@@ -1,11 +1,12 @@
 import {Request, Response} from "express";
 import {UserRecord} from "../records/user.record";
 import {BookmarkRecord} from "../records/bookmark.record";
+import {UserIdRequest} from "../@types/types";
 
-export const addBookmark = async (req: Request, res: Response) => {
+export const addBookmark = async (req: UserIdRequest, res: Response) => {
     // Retrieve bookmark data from the request body
     const {id, bookmarkName} = req.body;
-    const {userId} = req.params;
+    const {userId} = req;
 // Checks if the user exists
     await UserRecord.findById(userId);
 // Create a new instance of BookmarkRecord
@@ -21,8 +22,8 @@ export const getSingleBookmark = async (req: Request, res: Response) => {
     res.json({bookmark});
 }
 
-export const getUserBookmarks = async (req: Request, res: Response) => {
-    const {userId} = req.params;
+export const getUserBookmarks = async (req: UserIdRequest, res: Response) => {
+    const {userId} = req;
     // Check if the user exists before retrieving the bookmarks
     await UserRecord.findById(userId);
     // Retrieve user's bookmarks using findByUserId method
@@ -30,14 +31,15 @@ export const getUserBookmarks = async (req: Request, res: Response) => {
     res.json({bookmarks});
 }
 
-export const clearBookmarks = async (req: Request, res: Response) => {
-    const userId = req.params.userId;
+export const clearBookmarks = async (req: UserIdRequest, res: Response) => {
+    const {userId} = req;
     await BookmarkRecord.clearAllBookmarks(userId);
     res.status(204).end();
 };
 
-export const deleteBookmark = async (req: Request, res: Response) => {
-    const {userId, bookmarkId} = req.params;
+export const deleteBookmark = async (req: UserIdRequest, res: Response) => {
+    const { bookmarkId} = req.params;
+    const {userId} = req;
     // Check if the bookmark belongs to specified user (userId), if yes - removes them
     await BookmarkRecord.removeBookmark(bookmarkId, userId)
     res.status(204).end();
