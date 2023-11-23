@@ -18,4 +18,4 @@ subtaskRouter.post("/", addSubtask);
 subtaskRouter.put("/:subtaskId", updateSubtaskName);
 // DELETE
 subtaskRouter.delete("/", clearSubtasks);
-subtaskRouter.delete("/", deleteSubtask);
+subtaskRouter.delete("/:subtaskId", deleteSubtask);
