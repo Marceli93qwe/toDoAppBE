@@ -52,8 +52,8 @@ export const deleteSubtask = async (req: Request, res: Response) => {
 
 export const updateSubtaskName = async (req: Request, res: Response) => {
     const {subtaskId} = req.params;
-    const {newName} = req.body;
-    await SubtaskRecord.updateName(subtaskId, newName);
+    const {updatedName} = req.body;
+    await SubtaskRecord.updateName(subtaskId, updatedName);
     res.status(204).end();
 }
 
