@@ -13,7 +13,7 @@ export const verifyJWT = (req: UserIdRequest, res: Response, next: NextFunction)
 
     try {
         const decoded = decode(token);
-        req.userId = (decoded as JwtPayload).id;  // Assuming 'id' is a field in our JWT.
+        req.userEmail = (decoded as JwtPayload).email;  // Assuming 'email' is a field in our JWT.
         next();
     } catch (err) {
         return res.status(401).send('Wrong token given.');
