@@ -21,6 +21,7 @@ export class TaskRecord implements ITaskRecord {
     color: string;
     deadlineDate: string;
     description: string;
+    active: boolean;
 
     constructor
     (
@@ -30,7 +31,8 @@ export class TaskRecord implements ITaskRecord {
         color: string,
         priority: number,
         deadlineDate: string,
-        id?: string
+        active: boolean,
+        id?: string,
     ) {
         this.id = id;
         this.taskName = taskName;
@@ -38,7 +40,8 @@ export class TaskRecord implements ITaskRecord {
         this.description = description;
         this.color = color;
         this.priority = priority;
-        this.deadlineDate = deadlineDate
+        this.deadlineDate = deadlineDate;
+        this.active = active;
     }
 
     // Method to get all tasks from the database
@@ -54,6 +57,7 @@ export class TaskRecord implements ITaskRecord {
             color: row.color,
             deadlineDate: row.deadlineDate,
             description: row.description,
+            active: row.active,
         })) as ITaskRecord[];
     }
 
@@ -118,9 +122,9 @@ export class TaskRecord implements ITaskRecord {
     async addToDatabase(): Promise<void> {
 
         this.validate();
-        const {id, taskName, bookmarkId, priority, color, deadlineDate, description} = this;
-        const query = `INSERT INTO \`tasks\` (id, taskName, bookmarkId, priority, color, deadlineDate, description) VALUES (:id, :taskName, :bookmarkId, :priority, :color, :deadlineDate, :description)`;
-        const values = {id, taskName, bookmarkId, priority, color, deadlineDate, description};
+        const {id, taskName, bookmarkId, priority, color, deadlineDate, description, active} = this;
+        const query = `INSERT INTO \`tasks\` (id, taskName, bookmarkId, priority, color, deadlineDate, description, active) VALUES (:id, :taskName, :bookmarkId, :priority, :color, :deadlineDate, :description, :active)`;
+        const values = {id, taskName, bookmarkId, priority, color, deadlineDate, description, active};
         await pool.execute(query, values);
     }
 }
