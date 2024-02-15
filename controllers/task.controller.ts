@@ -18,10 +18,10 @@ export const addTask = async (req: Request, res: Response) => {
     const {bookmarkId} = req.params;
 
     // Get the task data from the request body
-    const {taskName, description} = req.body;
+    const {taskName, description, deadlineDate, priority, color} = req.body;
 
     // Create a new task record
-    const task = new TaskRecord(taskName, bookmarkId, description);
+    const task = new TaskRecord(taskName, bookmarkId, description, color, priority, deadlineDate);
 
     // Add the task to the database
     await task.addToDatabase();
