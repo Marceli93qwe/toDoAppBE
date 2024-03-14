@@ -61,6 +61,7 @@ export class TaskRecord implements ITaskRecord {
         })) as ITaskRecord[];
     }
 
+    // function that fetches all user's tasks by his ID
     static async getAllUsersTasks(userId: string) {
         const query = `SELECT \`taskName\` FROM \`tasks\`
          JOIN \`bookmarks\` ON tasks.bookmarkId = \`bookmarks\`.\`id\`
