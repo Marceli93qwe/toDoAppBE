@@ -21,10 +21,10 @@ export const addTask = async (req: Request, res: Response) => {
     const {bookmarkId} = req.params;
 
     // Get the task data from the request body
-    const {taskName, description} = req.body;
+    const {taskName, description, deadlineDate, priority, color, active} = req.body;
 
     // Create a new task record
-    const task = new TaskRecord(taskName, bookmarkId, description);
+    const task = new TaskRecord(taskName, bookmarkId, description, color, priority, deadlineDate, active);
 
     // Add the task to the database
     await task.addToDatabase();
@@ -42,8 +42,8 @@ export const clearTasks = async (req: Request, res: Response) => {
 export const getSingleTask = async (req: Request, res: Response) => {
     const {taskId} = req.params;
     const task = await TaskRecord.getTask(taskId);
-    const {id, taskName} = task
-    res.json({id, taskName});
+    const {id, taskName, bookmarkId, description, deadlineDate, priority, color} = task
+    res.json({id, taskName, bookmarkId, description, deadlineDate, priority, color});
 }
 
 export const deleteTask = async (req: Request, res: Response) => {

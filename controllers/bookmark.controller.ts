@@ -7,7 +7,7 @@ export const addBookmark = async (req: UserIdRequest, res: Response) => {
     // Retrieve bookmark data from the request body
     const {id, bookmarkName} = req.body;
     const {userId} = req;
-// Checks if the user exists
+// Checks if the user exists and if yes, save his id as userId
     await UserRecord.findById(userId);
 // Create a new instance of BookmarkRecord
     const bookmark = new BookmarkRecord({id, bookmarkName, userId});
