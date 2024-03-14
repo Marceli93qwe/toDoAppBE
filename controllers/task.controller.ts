@@ -13,6 +13,9 @@ export const getAllTasksFromBookmark = async (req: Request, res: Response): Prom
     });
 };
 
+export const getAllUsersTasks = async () => {
+    
+}
 export const addTask = async (req: Request, res: Response) => {
     // Get the bookmark ID from the request path
     const {bookmarkId} = req.params;

@@ -11,6 +11,7 @@ import {Router} from "express";
 export const taskRouter = Router({mergeParams: true})
 
 // GET
+taskRouter.get("/all")
 taskRouter.get("/", getAllTasksFromBookmark);
 taskRouter.get("/:taskId", getSingleTask);
 // POST

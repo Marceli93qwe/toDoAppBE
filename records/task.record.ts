@@ -32,6 +32,20 @@ export class TaskRecord implements ITaskRecord {
         })) as ITaskRecord[];
     }
 
+    static async getAllUsersTasks(userId: string) {
+        const query = `SELECT \`taskName\` FROM \`tasks\`
+         JOIN \`bookmarks\` ON tasks.bookmarkId = \`bookmarks\`.\`id\`
+         JOIN \`users\` ON \`bookmarks\`.\`userId\` = \`users\`.\`id\`
+         WHERE \`users\`.\`id\` = ":userId";`;
+        const value = {userId};
+        const [rows] = (await pool.execute(query, value)) as RowDataPacket[][];
+        return rows.map(row => ({
+            id: row.id,
+            taskName: row.taskName,
+            bookmarkId: row.bookmarkId
+        })) as ITaskRecord[];
+    }
+
     // Method to get a specific task from the database
     static async getTask(id: string): Promise<ITaskRecord> {
         const query = 'SELECT * FROM tasks WHERE id = :id';
