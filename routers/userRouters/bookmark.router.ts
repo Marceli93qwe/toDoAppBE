@@ -11,6 +11,7 @@ import {Router} from "express";
 export const bookmarkRouter = Router({mergeParams: true})
 
 // GET
+
 bookmarkRouter.get('/', getUserBookmarks);
 bookmarkRouter.get("/:bookmarkId", getSingleBookmark);
 // POST
