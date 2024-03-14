@@ -16,7 +16,7 @@ export const getAllTasksFromBookmark = async (req: Request, res: Response): Prom
 export const getAllUsersTasks = async (req: Request, res: Response) => {
     const {userId} = req.body;
     const tasks = await TaskRecord.getAllUsersTasks(userId);
-    console.log(tasks);
+    res.json(tasks)
 }
 export const addTask = async (req: Request, res: Response) => {
     // Get the bookmark ID from the request path
