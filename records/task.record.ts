@@ -64,10 +64,10 @@ export class TaskRecord implements ITaskRecord {
     // function that fetches all user's tasks by his ID
     static async getAllUsersTasks(userId: string) {
         console.log('ok', userId)
-        const query = `SELECT \`taskName\` FROM \`tasks\`
-         JOIN \`bookmarks\` ON tasks.bookmarkId = \`bookmarks\`.\`id\`
-         JOIN \`users\` ON \`bookmarks\`.\`userId\` = \`users\`.\`id\`
-         WHERE \`users\`.\`id\` = ":userId";`;
+        const query = 'SELECT `taskName` from `tasks`' +
+            ' JOIN bookmarks ON tasks.bookmarkId = bookmarks.id' +
+            ' JOIN users ON bookmarks.userId = users.id' +
+            ' WHERE users.id = ' + `'${userId}'`;
         const value = {userId};
         const [rows] = (await pool.execute(query, value)) as RowDataPacket[][];
         return rows.map(row => ({

@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import {TaskRecord} from "../records/task.record";
+import {UserIdRequest} from "../@types/types";
 
 export const getAllTasksFromBookmark = async (req: Request, res: Response): Promise<void> => {
     // Here we retrieve the bookmarkId from the route parameters
@@ -13,8 +14,9 @@ export const getAllTasksFromBookmark = async (req: Request, res: Response): Prom
     });
 };
 
-export const getAllUsersTasks = async (req: Request, res: Response) => {
-    const {userId} = req.body;
+export const getAllUsersTasks = async (req: UserIdRequest, res: Response) => {
+    const {userId} = req;
+    console.log(userId);
     const tasks = await TaskRecord.getAllUsersTasks(userId);
     res.json(tasks)
 }
