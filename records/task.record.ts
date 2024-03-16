@@ -64,7 +64,7 @@ export class TaskRecord implements ITaskRecord {
     // function that fetches all user's tasks by his ID
     static async getAllUsersTasks(userId: string) {
         console.log('ok', userId)
-        const query = 'SELECT `taskName` from `tasks`' +
+        const query = 'SELECT `tasks`.* from `tasks`' +
             ' JOIN bookmarks ON tasks.bookmarkId = bookmarks.id' +
             ' JOIN users ON bookmarks.userId = users.id' +
             ' WHERE users.id = ' + `'${userId}'`;
@@ -73,7 +73,11 @@ export class TaskRecord implements ITaskRecord {
         return rows.map(row => ({
             id: row.id,
             taskName: row.taskName,
-            bookmarkId: row.bookmarkId
+            bookmarkId: row.bookmarkId,
+            priority: row.priority,
+            color: row.color,
+            deadlineDate: row.deadlineDate,
+            description: row.description,
         })) as ITaskRecord[];
     }
 
@@ -93,7 +97,6 @@ export class TaskRecord implements ITaskRecord {
             color: row.color,
             deadlineDate: row.deadlineDate,
             description: row.description,
-
         };
     }
 
