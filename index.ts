@@ -11,5 +11,6 @@ app.use(cors({methods: ['GET', 'POST', 'DELETE']}))
 app.use(express.json())
 app.use("/auth", authRouter)
 app.use("/users", userRouter)
+app.use("/contact", sendMailRouter)
 app.use(errorHandler);
 app.listen(3001, "192.168.31.115", () => console.log("Listening on http://192.168.31.115:3001"));
