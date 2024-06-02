@@ -7,6 +7,10 @@ import {UserRecord} from "../records/user.record";
 
 
 dotenv.config()
+
+export const authenticate = (req: Request, res: Response) => {
+    res.json(true);
+}
 export const register = async (req: Request, res: Response) => {
     const {email, username, password} = req.body;
     const newUser = new UserRecord({username, email, password});
@@ -15,6 +19,7 @@ export const register = async (req: Request, res: Response) => {
 }
 
 export const login = async (req: Request, res: Response) => {
+    console.log(req.body);
     const {email, password} = req.body;
     const user = await UserRecord.findByEmail(email);
     if (await compare(password, user.password)) {
