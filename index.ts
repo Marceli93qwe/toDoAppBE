@@ -4,6 +4,7 @@ import {authRouter} from "./routers/auth.router";
 import {errorHandler} from "./middlewares/error.middleware";
 import {userRouter} from "./routers/userRouters/user.router";
 import cors from "cors";
+import {sendMailRouter} from "./routers/sendMail.router";
 
 const app = express();
 
