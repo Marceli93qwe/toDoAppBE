@@ -5,15 +5,15 @@ export async function sendEmail(name: string, email: string, message: string): P
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'your-email@gmail.com',
-            pass: 'your-email-password',
+            user: 'managertime07@gmail.com',
+            pass: 'Kieubasa1.',
         },
     });
 
     const mailOptions = {
         from: email,
         to: 'support@yourdomain.com',
-        subject: `Wiadomość wsparcia od ${name}`,
+        subject: `Wiadomość do supportu od ${name}`,
         text: message,
     };
 
