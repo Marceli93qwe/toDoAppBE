@@ -14,4 +14,4 @@ app.use("/auth", authRouter)
 app.use("/users", userRouter)
 app.use("/contact", sendMailRouter)
 app.use(errorHandler);
-app.listen(3001, "192.168.31.115", () => console.log("Listening on http://192.168.31.115:3001"));
+app.listen(3001, "192.168.100.13", () => console.log("Listening on http://192.168.100.13:3001"));
