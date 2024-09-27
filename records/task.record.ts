@@ -7,17 +7,41 @@ interface ITaskRecord {
     id?: string;
     taskName: string;
     bookmarkId: string;
+    priority: number;
+    color: string;
+    deadlineDate: string;
+    description: string;
 }
 
 export class TaskRecord implements ITaskRecord {
     id?: string;
     taskName: string;
     bookmarkId: string;
+    priority: number;
+    color: string;
+    deadlineDate: string;
+    description: string;
+    active: boolean;
 
-    constructor(taskName: string, bookmarkId: string, description?: string, id?: string) {
+    constructor
+    (
+        taskName: string,
+        bookmarkId: string,
+        description: string,
+        color: string,
+        priority: number,
+        deadlineDate: string,
+        active: boolean,
+        id?: string,
+    ) {
         this.id = id;
         this.taskName = taskName;
         this.bookmarkId = bookmarkId;
+        this.description = description;
+        this.color = color;
+        this.priority = priority;
+        this.deadlineDate = deadlineDate;
+        this.active = active;
     }
 
     // Method to get all tasks from the database
@@ -28,7 +52,32 @@ export class TaskRecord implements ITaskRecord {
         return rows.map(row => ({
             id: row.id,
             taskName: row.taskName,
-            bookmarkId: row.bookmarkId
+            bookmarkId: row.bookmarkId,
+            priority: row.priority,
+            color: row.color,
+            deadlineDate: row.deadlineDate,
+            description: row.description,
+            active: row.active,
+        })) as ITaskRecord[];
+    }
+
+    // function that fetches all user's tasks by his ID
+    static async getAllUsersTasks(userId: string) {
+        console.log('ok', userId)
+        const query = 'SELECT `tasks`.* from `tasks`' +
+            ' JOIN bookmarks ON tasks.bookmarkId = bookmarks.id' +
+            ' JOIN users ON bookmarks.userId = users.id' +
+            ' WHERE users.id = ' + `'${userId}'`;
+        const value = {userId};
+        const [rows] = (await pool.execute(query, value)) as RowDataPacket[][];
+        return rows.map(row => ({
+            id: row.id,
+            taskName: row.taskName,
+            bookmarkId: row.bookmarkId,
+            priority: row.priority,
+            color: row.color,
+            deadlineDate: row.deadlineDate,
+            description: row.description,
         })) as ITaskRecord[];
     }
 
@@ -43,7 +92,11 @@ export class TaskRecord implements ITaskRecord {
         return {
             id: row.id,
             taskName: row.taskName,
-            bookmarkId: row.bookmarkId
+            bookmarkId: row.bookmarkId,
+            priority: row.priority,
+            color: row.color,
+            deadlineDate: row.deadlineDate,
+            description: row.description,
         };
     }
 
@@ -88,9 +141,9 @@ export class TaskRecord implements ITaskRecord {
     async addToDatabase(): Promise<void> {
 
         this.validate();
-        const {id, taskName, bookmarkId} = this;
-        const query = 'INSERT INTO `tasks` (id, taskName, bookmarkId) VALUES (:id, :taskName, :bookmarkId)';
-        const values = {id, taskName, bookmarkId};
+        const {id, taskName, bookmarkId, priority, color, deadlineDate, description, active} = this;
+        const query = `INSERT INTO \`tasks\` (id, taskName, bookmarkId, priority, color, deadlineDate, description, active) VALUES (:id, :taskName, :bookmarkId, :priority, :color, :deadlineDate, :description, :active)`;
+        const values = {id, taskName, bookmarkId, priority, color, deadlineDate, description, active};
         await pool.execute(query, values);
     }
 }
